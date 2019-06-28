@@ -16,6 +16,7 @@
 # along with kiwi.  If not, see <http://www.gnu.org/licenses/>
 #
 import six
+import os
 
 # In python2 bytes is string which is different from
 # the bytes type in python3. The bytes type from the
@@ -42,8 +43,8 @@ class CommandProcess(object):
     :param subprocess command: instance of subprocess
     :param string log_topic: topic string for logging
     """
-    def __init__(self, command, log_topic='system'):
-        self.command = CommandIterator(command)
+    def __init__(self, command, log_topic='system', stderr_to_stdout=False):
+        self.command = CommandIterator(command, stderr_to_stdout)
         self.log_topic = log_topic
         self.items_processed = 0
 
@@ -159,15 +160,17 @@ class CommandIterator(six.Iterator):
 
     :param subprocess command: instance of subprocess
     """
-    def __init__(self, command):
+    def __init__(self, command, stderr_to_stdout=False):
         self.command = command
         self.command_error_output = bytes(b'')
         self.command_output_line = bytes(b'')
         self.output_eof_reached = False
         self.errors_eof_reached = False
+        self.stderr_to_stdout = stderr_to_stdout
 
     def __next__(self):
         line_read = None
+        stderr_line = None
         if self.command.process.poll() is not None:
             if self.output_eof_reached and self.errors_eof_reached:
                 raise StopIteration()
@@ -186,10 +189,18 @@ class CommandIterator(six.Iterator):
             byte_read = self.command.error.read(1)
             if not byte_read:
                 self.errors_eof_reached = True
+            elif self.stderr_to_stdout and byte_read == bytes(b'\n'):
+                stderr_line = Codec.decode(self.command_error_output)
+                self.command_error_output = bytes(b'')
             else:
                 self.command_error_output += byte_read
 
-        return line_read
+        if line_read and stderr_line:
+            return os.linesep.join(line_read, stderr_line)
+        if line_read:
+            return line_read
+        if stderr_line:
+            return stderr_line
 
     def get_error_output(self):
         """

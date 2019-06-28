@@ -22,6 +22,7 @@ from collections import namedtuple
 # project
 from kiwi.logger import log
 from kiwi.command import Command
+from kiwi.command_process import CommandProcess
 from kiwi.system.kernel import Kernel
 from kiwi.boot.image.base import BootImageBase
 from kiwi.defaults import Defaults
@@ -98,7 +99,7 @@ class BootImageDracut(BootImageBase):
             else:
                 included_files = self.included_files
             dracut_initrd_basename += '.xz'
-            Command.run(
+            cmd_call = Command.call(
                 [
                     'chroot', self.boot_root_directory,
                     'dracut', '--force',
@@ -110,6 +111,11 @@ class BootImageDracut(BootImageBase):
                     kernel_details.version
                 ]
             )
+            process = CommandProcess(
+                command=cmd_call, log_topic='initrd creation',
+                stderr_to_stdout=True
+            )
+            process.poll()
             Command.run(
                 [
                     'mv',

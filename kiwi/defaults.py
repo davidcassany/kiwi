@@ -1383,6 +1383,8 @@ class Defaults(object):
             return 'rpm'
         elif package_manager in deb_based:
             return 'dpkg'
+        elif package_manager == 'pacman':
+            return 'pacman'
 
     def get(self, key):
         """

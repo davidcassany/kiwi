@@ -129,6 +129,7 @@ class IsoToolsBase(object):
         ]
         syslinux_dirs = [
             '/usr/share/syslinux/',
+            '/usr/lib/syslinux/bios/',
             '/usr/lib/syslinux/modules/bios/',
             '/usr/lib/ISOLINUX/'
         ]
