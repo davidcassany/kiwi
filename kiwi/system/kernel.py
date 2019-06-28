@@ -161,7 +161,7 @@ class Kernel(object):
         """
         kernel_names = [
             # lookup for the symlink first
-            'vmlinux', 'vmlinuz'
+            'vmlinux', 'vmlinuz', 'vmlinuz-linux'
         ]
         kernel_dirs = sorted(os.listdir(''.join([self.root_dir, '/lib/modules'])))
         if kernel_dirs:
