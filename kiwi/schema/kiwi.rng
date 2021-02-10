@@ -1274,6 +1274,7 @@ the device is looked up in /dev/disk/by-* and /dev/mapper/*</a:documentation>
         <value>dnf</value>
         <value>microdnf</value>
         <value>pacman</value>
+        <value>luet</value>
       </choice>
     </define>
     <define name="k.packagemanager.attlist">

@@ -732,6 +732,7 @@ class k_packagemanager_content(object):
     DNF='dnf'
     MICRODNF='microdnf'
     PACMAN='pacman'
+    LUET='luet'
 
 
 class k_source(GeneratedsSuper):

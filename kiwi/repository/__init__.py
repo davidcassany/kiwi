@@ -52,7 +52,8 @@ class Repository(metaclass=ABCMeta):
             'yum': ['dnf', 'Dnf'],
             'microdnf': ['dnf', 'Dnf'],
             'apt-get': ['apt', 'Apt'],
-            'pacman': ['pacman', 'Pacman']
+            'pacman': ['pacman', 'Pacman'],
+            'luet': ['luet', 'Luet']
         }
         try:
             repository = importlib.import_module(
