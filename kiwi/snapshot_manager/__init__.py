@@ -28,14 +28,15 @@ from kiwi.exceptions import KiwiSnapshotManagerSetupError
 
 class SnapshotManager(metaclass=ABCMeta):
     """
-    **VolumeManager factory**
+    **SnapshotManager factory**
 
-    :param str name: volume management name
-    :param dict device_map:
-        dictionary of low level DeviceProvider intances
-    :param str root_dir: root directory path name
-    :param list volumes: list of volumes from :class:`XMLState::get_volumes()`
-    :param dict custom_args: dictionary of custom volume manager arguments
+    :param str name: snapshot management name
+    :param str device: storage device node name
+    :param str root_dir: root directory path
+    :param str mountpoint: mountpoint of the filesystem to snapshot
+    :param str root_volume_name: the name of the root volume in case
+        snapshots are hosted in a subvolume.
+    :param dict custom_args: dictionary of custom snapshot manager arguments
     """
     @abstractmethod
     def __init__(self) -> None:
@@ -43,7 +44,7 @@ class SnapshotManager(metaclass=ABCMeta):
 
     @staticmethod
     def new(
-        name: str, root_dir: str, mountpoint: str,
+        name: str, device: str, root_dir: str, mountpoint: str,
         root_volume_name: str, custom_args: Dict = None
     ):
         name_map = {
@@ -55,7 +56,7 @@ class SnapshotManager(metaclass=ABCMeta):
             )
             module_name = 'SnapshotManager{0}'.format(name_map[name])
             return snapshot_manager.__dict__[module_name](
-                root_dir, mountpoint, root_volume_name, custom_args
+                device, root_dir, mountpoint, root_volume_name, custom_args
             )
         except Exception as issue:
             raise KiwiSnapshotManagerSetupError(

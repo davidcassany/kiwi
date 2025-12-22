@@ -27,7 +27,7 @@ from kiwi.command import Command
 from kiwi.utils.command_capabilities import CommandCapabilities
 from kiwi.path import Path
 from kiwi.defaults import Defaults
-from kiwi.snapshot_manager import SnapshotManagerBase
+from kiwi.snapshot_manager.base import SnapshotManagerBase
 from kiwi.mount_manager import MountManager
 from kiwi.utils.sysconfig import SysConfig
 from kiwi.chroot_manager import (
@@ -117,7 +117,7 @@ class SnapshotManagerSnapper(SnapshotManagerBase):
             f'{self.root_volume_name}/.snapshots/1/snapshot'
         ])
         if CommandCapabilities.check_version(
-            'snapper', (0, 12, 1), root=self.mountpoint
+            'snapper', (0, 12, 1), root=root_path
         ):
             snapshots_prefix = os.sep.join([root_path, '.snapshots'])
             with ChrootManager(

@@ -25,17 +25,20 @@ from kiwi.mount_manager import MountManager
 
 class SnapshotManagerBase:
     """
-    **Implements the snapshots management inferface**
+    **Implements base class for snapshots management inferface**
 
+    :param str device: storage device node name 
     :param str root_dir: root directory path
     :param str mountpoint: mountpoint of the filesystem to snapshot
     :param str root_volume_name: the name of the root volume in case
         snapshots are hosted in a subvolume.
+    :param dict custom_args: dictionary of custom snapshot manager arguments
     """
     def __init__(
-        self, root_dir: str, mountpoint: str, root_volume_name: str,
-        custom_args: Optional[Dict[str, Any]] = None
+        self, device: str, root_dir: str, mountpoint: str,
+        root_volume_name: str, custom_args: Optional[Dict[str, Any]] = None
     ) -> None:
+        self.device = device
         self.root_dir = root_dir
         self.mountpoint = mountpoint
         self.root_volume_name = root_volume_name

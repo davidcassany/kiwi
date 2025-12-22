@@ -134,8 +134,8 @@ class VolumeManagerBtrfs(VolumeManagerBase):
                 ['btrfs', 'subvolume', 'create', root_volume]
             )
         if self.custom_args['root_is_snapper_snapshot']:
-            self.snapper = SnapshotManager(
-                'snapper', self.root_dir, self.moutpoint,
+            self.snapper = SnapshotManager.new(
+                'snapper', self.device, self.root_dir, self.mountpoint,
                 self.root_volume_name,
                 {'quota_groups': self.custom_args['quota_groups']}
             )
